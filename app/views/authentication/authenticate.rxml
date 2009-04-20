@@ -1,0 +1,8 @@
+xml.instruct! :xml, :version=>"1.0"
+xml.authenticate(:version => "0"){
+  if @authenticated
+    xml.authenticated("true")
+  else
+    xml.authenticated("false")
+  end
+}
