@@ -8,20 +8,32 @@ class User < ActiveRecord::Base
 
   # creates new user, adds email and p/w and encrypts password
   def self.new_from_signup(email, password)
-    user = self.new()
-    user.email = email
-    user.password = password
-    user.encrypt_password()
-    return user
+    user = nil
+    if email && password
+      user = self.new()
+      user.email = email
+      user.password = password
+      user.encrypt_password()
+    end
+    
+    user
   end
 
   def encrypt_password
-    self.password_encryption_salt = Digest::SHA1.hexdigest(Time.now.to_s) if !self.salt
+    self.password_encryption_salt = Digest::SHA1.hexdigest(Time.now.to_s + self.email.to_s) if !self.salt
     self.encrypted_password = encrypt_str(password)
   end
   
   def self.encrypt_str(password)
     self.class.encrypt(password, salt)
+  end
+  
+  def send_verify_email
+    Mailing::deliver_account_verify_email(self)
+  end
+  
+  def verify_link
+    Linking::verify_link(self.salt)
   end
   
   # returns true if user exists w/ email and password 
@@ -35,7 +47,7 @@ class User < ActiveRecord::Base
       end
     end
     
-    return authenticated
+    authenticated
   end
   
   # get NUMBER_OF_FAILED_LOGINS_FOR_LOCKOUT most recent logins for ip and email.  If any were successful, account is unlocked.
@@ -52,6 +64,6 @@ class User < ActiveRecord::Base
       end
     end
     
-    return unlocked
+    unlocked
   end
 end

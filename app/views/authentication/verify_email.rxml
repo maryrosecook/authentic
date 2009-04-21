@@ -1,0 +1,4 @@
+xml.instruct! :xml, :version=>"1.0"
+xml.verify_email(:version => "0"){
+  @verified_email ? xml.verified_email("true") : xml.verified_email("false")
+}

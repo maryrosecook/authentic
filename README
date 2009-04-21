@@ -1,3 +1,4 @@
 * could add in a response that included reasons for signup failure, if appropriate
 * note xml and basic html interface.
 * problem w/ ip if user with a ton of other users on same ip e.g. University - one fellow student trying to break into their account could lock legit user out
+* verify link uses salt shared w/ password encryption for verification.  Would be worthwhile using different salt for security
