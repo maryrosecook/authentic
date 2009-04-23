@@ -2,7 +2,7 @@ class AuthenticationController < ApplicationController
   
   # authenticates with send email and password
   def authenticate
-    @authenticated = User.authenticated?(params[:email], params[:password], request.remote_ip)
+    @login = User.authenticated?(params[:email], params[:password], request.remote_ip)
     
     respond_to do |format|
       format.html
@@ -16,6 +16,7 @@ class AuthenticationController < ApplicationController
     new_user = User.new_from_signup(params[:email], params[:password])
     if new_user && new_user.save()
       @signed_up = "true"
+      Mailing.deliver_account_verify_email(new_user)
     end
     
     respond_to do |format|
@@ -25,12 +26,12 @@ class AuthenticationController < ApplicationController
   end
   
   # looks for user w/ passed salt.  If found, sets them to verified.
-  def verify
-    @verified = false
+  def verify_email
+    @verified_email = false
     if salt = params[:id]
       if user = User.find_by_salt(salt)
         user.verified = true
-        @verified = true if user.save()
+        @verified_email = true if user.save()
       end
     end
     

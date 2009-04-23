@@ -1,4 +1,9 @@
 xml.instruct! :xml, :version=>"1.0"
-xml.authenticate(:version => "0"){
-  @authenticated ? xml.authenticated("true") : xml.authenticated("false")
+xml.authenticate() {
+  if @login.outcome == 1
+    xml.authenticated("true")
+  else
+    xml.authenticated("false")
+    xml.failure_reason(@login.failure_reason)
+  end
 }

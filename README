@@ -1,4 +1,35 @@
-* could add in a response that included reasons for signup failure, if appropriate
-* note xml and basic html interface.
-* problem w/ ip if user with a ton of other users on same ip e.g. University - one fellow student trying to break into their account could lock legit user out
-* verify link uses salt shared w/ password encryption for verification.  Would be worthwhile using different salt for security
+Instructions:
+
+1. Visit a public area of the website by going to: /
+2. Signup by going to: /authentication/signup?email=[email]&password=[password]&format=xml
+3. Verify your email address by going to: /authentication/verify_email/[salt]?format=xml
+4. Login by going to: /authentication/authenticate?email=email&password=[password]&format=xml
+5. Visit a private area of the site by going to: /profile and entering your email and password
+
+Usage
+
+You can get either HTML or XML responses from the authentication service.  This means it could easily be used for authentication for both the Ableton website and Ableton software.
+
+Email Verification
+
+This is done by emailing the user a verify link that includes a secret 'salt'.  This means they must have provided a valid email address in order to receive their account and verify.  However, using the 'salt' could be problematic because it is also used when encrypting the user's password, thus leaving the user's password more vulnerable.  A better approach might be to use two separate 'salt' strings for the two separate purposes.
+
+Data Transmission Security
+
+Since the user sends their password when signing up and authenticating, it is not secure.  It would better to do signup and authentication over an SSL connection.
+
+Logging Into The Members' Section
+
+When a user visits the members' only section, they are asked for their email and password via basic auth.  If I were developing a full website, I would get the user to login via an HTML form and then set a cookie that would keep them logged in.  This would provide a much better user experience.
+
+Account Security
+
+A user can only try to authenticate x times inside y minutes with a certain email from a certain IP address.  This reduces the likelihood of an attacker guessing an email and password combination.  However, if an IP address is shared by many people (say, at a University), an attacker on that IP who is trying to get into the account of a legitimate user on the same IP could lock that user out.
+
+Authentication
+
+The service gives a reason when an authentication attempt is rejected.  For example: wrong email and password combination (the vagueness about which one is wrong is intentional), too many attempts, and email not verified.
+
+Spammer Account Creation
+
+It is possible that spammers will create lots of accounts.  To stop this, there could be limits imposed on the number of accounts that may be created from an IP address within a certain period of time.

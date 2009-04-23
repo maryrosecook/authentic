@@ -1,4 +1,4 @@
 xml.instruct! :xml, :version=>"1.0"
-xml.signup(:version => "0"){
+xml.signup(){
   @signed_up ? xml.signed_up("true") : xml.signed_up("false")
 }

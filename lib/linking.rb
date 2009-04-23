@@ -11,7 +11,7 @@ module Linking
   
   # returns a verify link for the passed salt
   def self.verify_link(salt)
-    get_host() + "/authentication/verify/" + salt
+    get_host() + "/authentication/verify_email/" + salt
   end
   
   def self.production?

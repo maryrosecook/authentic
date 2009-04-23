@@ -1,5 +1,5 @@
 class TestController < ApplicationController
-  before_filter :logged_in?, :only => { :profile }
+  before_filter :authenticate, :only => [ :profile ]
   
   # all users can access here
   def index

@@ -12,6 +12,6 @@ class Mailing < ActionMailer::Base
     subject "Please verify your new Authentic account"
 
     body[:email] = new_user.email
-    body[:verify_link] = user.verify_link()
+    body[:verify_link] = new_user.verify_link()
   end
 end
