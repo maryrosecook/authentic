@@ -10,9 +10,7 @@ Usage
 
 You can get either HTML or XML responses from the authentication service.  This means it could easily be used for authentication for both the Ableton website and Ableton software.
 
-Email Verification
-
-This is done by emailing the user a verify link that includes a secret 'salt'.  This means they must have provided a valid email address in order to receive their account and verify.  However, using the 'salt' could be problematic because it is also used when encrypting the user's password, thus leaving the user's password more vulnerable.  A better approach might be to use two separate 'salt' strings for the two separate purposes.
+All requests are made via simple URLs and are easily readable and understandable by the user.
 
 Data Transmission Security
 
@@ -24,7 +22,11 @@ When a user visits the members' only section, they are asked for their email and
 
 Account Security
 
-A user can only try to authenticate x times inside y minutes with a certain email from a certain IP address.  This reduces the likelihood of an attacker guessing an email and password combination.  However, if an IP address is shared by many people (say, at a University), an attacker on that IP who is trying to get into the account of a legitimate user on the same IP could lock that user out.
+A user can only try to authenticate x times inside y minutes with a certain email from a certain IP address.  This reduces the likelihood of an attacker guessing an email and password combination.  However, if an IP address is shared by many people (say, on a University network), an attacker on that IP who is trying to get into the account of a legitimate user on the same IP could lock that user out.
+
+Email Verification
+
+This is done by emailing the user a verify link that includes a secret 'salt'.  This verifies that they received the email and, thus, their email address is valid.  However, using this 'salt' could be problematic because it is also used when encrypting the user's password, thus leaving the user's password more vulnerable.  A better approach might be to use two separate 'salt' strings for the two separate purposes.
 
 Authentication
 
@@ -33,3 +35,7 @@ The service gives a reason when an authentication attempt is rejected.  For exam
 Spammer Account Creation
 
 It is possible that spammers will create lots of accounts.  To stop this, there could be limits imposed on the number of accounts that may be created from an IP address within a certain period of time.
+
+Verification Of Requests
+
+It would be possible for an attacker to intercept requests and change the data en route.  To prevent this, a hash of the passed arguments could be included with all requests.  This would offer confirmation that the arguments had not been altered between the sender and the service.
